@@ -13,6 +13,7 @@ export default defineConfig(({ command }) => {
     if (process.env.CF_PAGES === '1' || process.env.CF_PAGES_COMMIT_SHA) return '/';
     if (process.env.VITE_BASE_PATH) return process.env.VITE_BASE_PATH;
     if (process.env.BASE_PATH) return process.env.BASE_PATH;
+    if (process.env.GITHUB_ACTIONS === 'true') return '/Dhaka-Night-Market/';
     return '/Dhaka-Night-Market/';
   };
 
