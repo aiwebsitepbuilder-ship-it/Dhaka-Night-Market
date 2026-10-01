@@ -1,4 +1,8 @@
 import { EventDetail, ExperienceCategory, GalleryItem, StoryItem } from '../types';
+import theWeddingShowImg from '../assets/images/the_wedding_show_1790767339554.jpg';
+import summerEditionBannerImg from '../assets/images/summer_edition_banner_1790770101633.jpg';
+import season2SehriBannerImg from '../assets/images/season_2_sehri_banner_1790770541419.jpg';
+import dhakaSplendorBannerImg from '../assets/images/dhaka_splendor_banner_1790770764936.jpg';
 
 export const OFFICIAL_INFO = {
   name: 'Dhaka Night Market',
@@ -45,7 +49,7 @@ export const UPCOMING_EVENTS: EventDetail[] = [
       ],
     },
     status: 'upcoming',
-    imageUrl: '/src/assets/images/the_wedding_show_1790767339554.jpg',
+    imageUrl: theWeddingShowImg,
     imagePlaceholderText: '[Official Event Poster / Banner Placeholder - Wedding & Lifestyle Exhibition]',
     notes: 'Free entry for all visitors. Join us for a curated exhibition of bridal wear, gold & diamond jewelry, and premier lifestyle collections.',
     notesBn: 'সকল দর্শনার্থীদের জন্য ফ্রি এন্ট্রি। ব্রাইডাল পোশাক, স্বর্ণ ও হীরার অলঙ্কার এবং প্রিমিয়াম লাইফস্টাইল কালেকশনের কিউরেটেড প্রদর্শনীতে আপনাকে স্বাগতম।',
@@ -69,7 +73,7 @@ export const PREVIOUS_EVENTS: EventDetail[] = [
     admissionBn: 'সবার জন্য উন্মুক্ত (ফ্রি এন্ট্রি)',
     theme: "Bangladesh's first-ever Summer Night Market experience — bigger, bolder, and unmissable",
     themeBn: 'বাংলাদেশের প্রথম সামার নাইট মার্কেট অভিজ্ঞতা — আরও জমকালো ও বর্ণাঢ্য আয়োজন',
-    imageUrl: '/src/assets/images/summer_edition_banner_1790770101633.jpg',
+    imageUrl: summerEditionBannerImg,
     footfall: '15,000+ Visitors',
     brandCount: '100+ Lifestyle Brands',
     foodBrandCount: '15+ Food Brands',
@@ -117,7 +121,7 @@ export const PREVIOUS_EVENTS: EventDetail[] = [
     admissionBn: 'সবার জন্য উন্মুক্ত (ফ্রি এন্ট্রি)',
     theme: "Special Ramadan Foodcourt with 20+ Food Brands for Iftar, Dinner & Sehri",
     themeBn: 'ইফতার, ডিনার ও সেহরির ২০+ ফুড ব্র্যান্ড নিয়ে বিশেষ রমাদান ফুডকোর্ট নাইট এক্সপো',
-    imageUrl: '/src/assets/images/season_2_sehri_banner_1790770541419.jpg',
+    imageUrl: season2SehriBannerImg,
     footfall: '25,000+ Visitors',
     brandCount: '100+ Lifestyle Brands',
     foodBrandCount: '20+ Food Brands & 10+ Specialty Brands',
@@ -167,7 +171,7 @@ export const PREVIOUS_EVENTS: EventDetail[] = [
     admissionBn: 'সবার জন্য উন্মুক্ত (ফ্রি এন্ট্রি)',
     theme: 'Grand Lifestyle Expo of the Year celebrating Dhaka Night Market & Women Entrepreneurs',
     themeBn: 'ঢাকা নাইট মার্কেটের সাফল্য ও নারী উদ্যোক্তাদের সবচেয়ে বড় লাইফস্টাইল এক্সপো',
-    imageUrl: '/src/assets/images/dhaka_splendor_banner_1790770764936.jpg',
+    imageUrl: dhakaSplendorBannerImg,
     footfall: 'Grand Community Expo',
     brandCount: '100+ Brands & Designers',
     foodBrandCount: 'Curated Food Court',
@@ -270,7 +274,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     year: '2026',
     category: 'bridal',
     aspectRatio: '16:9',
-    imageUrl: '/src/assets/images/the_wedding_show_1790767339554.jpg',
+    imageUrl: theWeddingShowImg,
     placeholderLabel: '[Official Event Artwork - Wedding & Lifestyle Exhibition]',
   },
   {
@@ -311,7 +315,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     year: '2026',
     category: 'event',
     aspectRatio: '16:9',
-    imageUrl: '/src/assets/images/summer_edition_banner_1790770101633.jpg',
+    imageUrl: summerEditionBannerImg,
     placeholderLabel: '[Official Summer Edition Banner - Sheraton Banani]',
   },
   {
@@ -322,7 +326,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     year: '2026',
     category: 'food',
     aspectRatio: '16:9',
-    imageUrl: '/src/assets/images/season_2_sehri_banner_1790770541419.jpg',
+    imageUrl: season2SehriBannerImg,
     placeholderLabel: '[Official Season 2 Ramadan Foodcourt Banner]',
   },
   {
@@ -344,7 +348,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     year: '2024',
     category: 'event',
     aspectRatio: '16:9',
-    imageUrl: '/src/assets/images/dhaka_splendor_banner_1790770764936.jpg',
+    imageUrl: dhakaSplendorBannerImg,
     placeholderLabel: '[Official Dhaka Splendor 2.0 Banner - Banani Field]',
   },
 ];

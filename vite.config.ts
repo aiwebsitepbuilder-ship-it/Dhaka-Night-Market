@@ -5,11 +5,28 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: './',
+    base: '/Dhaka-Night-Market/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+      },
+    },
+    build: {
+      outDir: 'dist',
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+          about: path.resolve(__dirname, 'about.html'),
+          contact: path.resolve(__dirname, 'contact.html'),
+          events: path.resolve(__dirname, 'events.html'),
+          experience: path.resolve(__dirname, 'experience.html'),
+          gallery: path.resolve(__dirname, 'gallery.html'),
+          partners: path.resolve(__dirname, 'partners.html'),
+          stories: path.resolve(__dirname, 'stories.html'),
+          vendors: path.resolve(__dirname, 'vendors.html'),
+          notFound: path.resolve(__dirname, '404.html'),
+        },
       },
     },
     server: {

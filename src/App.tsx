@@ -36,9 +36,11 @@ export default function App() {
       return hash as PageId;
     }
 
-    const path = window.location.pathname.replace(/^\//, '').toLowerCase();
-    if (validPages.includes(path as PageId)) {
-      return path as PageId;
+    // Check path segments, e.g. /Dhaka-Night-Market/events or /events or /events.html
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1]?.replace(/\.html$/, '').toLowerCase();
+    if (lastSegment && validPages.includes(lastSegment as PageId)) {
+      return lastSegment as PageId;
     }
 
     return 'home';
@@ -47,13 +49,17 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>(getPageFromUrl);
   const [lang, setLang] = useState<Language>('en');
 
-  // Sync route on popstate (browser back/forward)
+  // Sync route on popstate and hashchange (browser back/forward or hash change)
   useEffect(() => {
-    const handlePopState = () => {
+    const handleRouteSync = () => {
       setCurrentPage(getPageFromUrl());
     };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handleRouteSync);
+    window.addEventListener('hashchange', handleRouteSync);
+    return () => {
+      window.removeEventListener('popstate', handleRouteSync);
+      window.removeEventListener('hashchange', handleRouteSync);
+    };
   }, []);
 
   // Update Page Title and SEO metadata on route change
