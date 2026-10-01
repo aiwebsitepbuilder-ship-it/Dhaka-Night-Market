@@ -3,9 +3,21 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  // Dynamic base path:
+  // - In dev server (AI Studio): '/'
+  // - In Cloudflare Pages (CF_PAGES=1): '/' (hosted at root domain)
+  // - On GitHub Pages / default: '/Dhaka-Night-Market/'
+  const getBasePath = () => {
+    if (command === 'serve') return '/';
+    if (process.env.CF_PAGES === '1' || process.env.CF_PAGES_COMMIT_SHA) return '/';
+    if (process.env.VITE_BASE_PATH) return process.env.VITE_BASE_PATH;
+    if (process.env.BASE_PATH) return process.env.BASE_PATH;
+    return '/Dhaka-Night-Market/';
+  };
+
   return {
-    base: '/Dhaka-Night-Market/',
+    base: getBasePath(),
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

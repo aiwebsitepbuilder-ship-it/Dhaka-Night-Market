@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dhaka Night Market</title>
     <script>
-      // Single Page Application redirect for GitHub Pages
+      // Single Page Application redirect for GitHub Pages & Cloudflare Pages
       (function () {
-        var base = '/Dhaka-Night-Market/';
+        var isGitHubPages = window.location.pathname.indexOf('/Dhaka-Night-Market/') === 0;
+        var base = isGitHubPages ? '/Dhaka-Night-Market/' : '/';
         var path = window.location.pathname;
-        if (path.indexOf(base) === 0) {
-          path = path.slice(base.length);
+        if (isGitHubPages) {
+          path = path.slice('/Dhaka-Night-Market/'.length);
         } else if (path.charAt(0) === '/') {
           path = path.slice(1);
         }
