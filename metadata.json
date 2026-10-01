@@ -1,0 +1,7 @@
+{
+  "name": "Dhaka Night Market",
+  "description": "Official website for Dhaka Night Market - Bangladesh’s first-ever Night Market experience. Discover upcoming events, experiences, vendor opportunities, and partners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

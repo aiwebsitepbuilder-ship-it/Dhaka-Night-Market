@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-bangla: 'Hind Siliguri', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #070B19;
+    color: #F8FAFC;
+    overflow-x: hidden;
+  }
+}
+
+.font-display {
+  font-family: 'Cinzel', Georgia, serif;
+}
+
+.font-bangla {
+  font-family: 'Hind Siliguri', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* Custom Night Market ambient glow effects */
+.glow-gold {
+  box-shadow: 0 0 40px -10px rgba(245, 158, 11, 0.25);
+}
+
+.glow-gold-lg {
+  box-shadow: 0 0 80px -15px rgba(245, 158, 11, 0.3);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 35%, #F59E0B 75%, #D97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-gradient {
+  border-image: linear-gradient(to right, rgba(245, 158, 11, 0.6), rgba(245, 158, 11, 0.1)) 1;
+}
