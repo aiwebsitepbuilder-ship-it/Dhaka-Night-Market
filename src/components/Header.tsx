@@ -3,17 +3,14 @@ import {
   Menu,
   X,
   Sparkles,
-  Phone,
-  Mail,
-  Instagram,
-  ChevronRight,
   Image as ImageIcon,
   BookOpen,
   Info,
+  Store,
+  Handshake,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { Language, PageId } from '../types';
-import { OFFICIAL_INFO } from '../data/content';
 
 interface HeaderProps {
   currentPage: PageId;
@@ -27,12 +24,13 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate,
   lang = 'en',
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const [mobileMoreMenuOpen, setMobileMoreMenuOpen] = useState(false);
+  const [desktopMoreMenuOpen, setDesktopMoreMenuOpen] = useState(false);
+  const mobileMoreMenuRef = useRef<HTMLDivElement>(null);
+  const desktopMoreMenuRef = useRef<HTMLDivElement>(null);
 
-  // Primary visible links in navbar: Home, Events, Vendors, Partners, Contact
-  const primaryNavItems: { id: PageId; labelEn: string; labelBn: string }[] = [
+  // Desktop primary visible links: Home, Events, Vendors, Partners, Contact
+  const desktopPrimaryNavItems: { id: PageId; labelEn: string; labelBn: string }[] = [
     { id: 'home', labelEn: 'Home', labelBn: 'হোম' },
     { id: 'events', labelEn: 'Events', labelBn: 'ইভেন্টসমূহ' },
     { id: 'vendors', labelEn: 'Vendors', labelBn: 'ভেন্ডর' },
@@ -40,8 +38,8 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'contact', labelEn: 'Contact', labelBn: 'যোগাযোগ' },
   ];
 
-  // Secondary links nested inside the more button: Experience, Gallery, Stories, About
-  const moreNavItems: {
+  // Desktop More links: Experience, Gallery, Stories, About (4 Pages)
+  const desktopMoreNavItems: {
     id: PageId;
     labelEn: string;
     labelBn: string;
@@ -83,40 +81,105 @@ export const Header: React.FC<HeaderProps> = ({
     },
   ];
 
-  const isMoreActive = moreNavItems.some((item) => item.id === currentPage);
+  // Mobile visible links in Header: Home, Events, Contact
+  const mobileVisibleNavItems: { id: PageId; labelEn: string; labelBn: string }[] = [
+    { id: 'home', labelEn: 'Home', labelBn: 'হোম' },
+    { id: 'events', labelEn: 'Events', labelBn: 'ইভেন্টসমূহ' },
+    { id: 'contact', labelEn: 'Contact', labelBn: 'যোগাযোগ' },
+  ];
 
-  // Close more menu on click outside
+  // Mobile More options: Vendors, Partners, Experience, Gallery, Stories, About (6 Pages)
+  const mobileMoreNavItems: {
+    id: PageId;
+    labelEn: string;
+    labelBn: string;
+    descriptionEn: string;
+    descriptionBn: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }[] = [
+    {
+      id: 'vendors',
+      labelEn: 'Vendors',
+      labelBn: 'ভেন্ডর',
+      descriptionEn: 'Apply for food & lifestyle stalls',
+      descriptionBn: 'ফুড ও লাইফস্টাইল স্টল বুকিং',
+      icon: Store,
+    },
+    {
+      id: 'partners',
+      labelEn: 'Partners',
+      labelBn: 'পার্টনার্স',
+      descriptionEn: 'Sponsorships & collaborations',
+      descriptionBn: 'স্পনসরশিপ ও যৌথ উদ্যোগ',
+      icon: Handshake,
+    },
+    {
+      id: 'experience',
+      labelEn: 'Experience',
+      labelBn: 'অভিজ্ঞতা',
+      descriptionEn: '6 signature festival pillars',
+      descriptionBn: 'উৎসবের ৬টি বিশেষ স্তম্ভ',
+      icon: Sparkles,
+    },
+    {
+      id: 'gallery',
+      labelEn: 'Gallery',
+      labelBn: 'গ্যালারি',
+      descriptionEn: 'Photos, videos & edition posters',
+      descriptionBn: 'ছবি, ভিডিও ও পোস্টার আর্কাইভ',
+      icon: ImageIcon,
+    },
+    {
+      id: 'stories',
+      labelEn: 'Stories',
+      labelBn: 'স্টোরিজ',
+      descriptionEn: 'Official event news & announcements',
+      descriptionBn: 'অফিসিয়াল ঘোষণা ও সংবাদ',
+      icon: BookOpen,
+    },
+    {
+      id: 'about',
+      labelEn: 'About',
+      labelBn: 'আমাদের সম্পর্কে',
+      descriptionEn: 'Vision, founders & organization',
+      descriptionBn: 'লক্ষ্য, প্রতিষ্ঠাতা ও আয়োজক',
+      icon: Info,
+    },
+  ];
+
+  const isDesktopMoreActive = desktopMoreNavItems.some((item) => item.id === currentPage);
+  const isMobileMoreActive = mobileMoreNavItems.some((item) => item.id === currentPage);
+
+  // Close menus on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
-        setMoreMenuOpen(false);
+      if (
+        desktopMoreMenuRef.current &&
+        !desktopMoreMenuRef.current.contains(event.target as Node)
+      ) {
+        setDesktopMoreMenuOpen(false);
+      }
+      if (
+        mobileMoreMenuRef.current &&
+        !mobileMoreMenuRef.current.contains(event.target as Node)
+      ) {
+        setMobileMoreMenuOpen(false);
       }
     };
-    if (moreMenuOpen) {
+    if (desktopMoreMenuOpen || mobileMoreMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [moreMenuOpen]);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [mobileMenuOpen]);
+  }, [desktopMoreMenuOpen, mobileMoreMenuOpen]);
 
   // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setMobileMenuOpen(false);
+        setMobileMoreMenuOpen(false);
+        setDesktopMoreMenuOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -125,24 +188,32 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleNavClick = (page: PageId) => {
     onNavigate(page);
-    setMobileMenuOpen(false);
+    setMobileMoreMenuOpen(false);
+    setDesktopMoreMenuOpen(false);
   };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#070B19]/90 backdrop-blur-md border-b border-amber-500/20 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
-          {/* Zone 1: Brand Wordmark */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20 gap-2 sm:gap-4">
+          {/* Brand Wordmark / Logo */}
           <div
             onClick={() => handleNavClick('home')}
             className="cursor-pointer shrink-0 py-1"
           >
-            <Logo size="md" showSubtitle={false} />
+            {/* Desktop / Tablet Logo */}
+            <div className="hidden sm:block">
+              <Logo size="md" showSubtitle={false} />
+            </div>
+            {/* Mobile Compact Emblem */}
+            <div className="block sm:hidden">
+              <Logo size="sm" showSubtitle={false} showText={false} />
+            </div>
           </div>
 
-          {/* Zone 2: Navigation (Visible Links + 3-Dot Dropdown for Experience, Gallery, Partners, Stories, About) */}
+          {/* Desktop Navigation (Home, Events, Vendors, Partners, Contact + More) */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-8 text-sm font-medium">
-            {primaryNavItems.map((item) => {
+            {desktopPrimaryNavItems.map((item) => {
               const isActive = currentPage === item.id;
               return (
                 <button
@@ -162,23 +233,23 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
 
-            {/* Hamburger Button containing Experience, Gallery, Partners, Stories, About */}
-            <div className="relative" ref={moreMenuRef}>
+            {/* Desktop More Button */}
+            <div className="relative" ref={desktopMoreMenuRef}>
               <button
-                onClick={() => setMoreMenuOpen((prev) => !prev)}
+                onClick={() => setDesktopMoreMenuOpen((prev) => !prev)}
                 className={`relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  isMoreActive
+                  isDesktopMoreActive
                     ? 'text-amber-300 font-semibold bg-amber-500/15 border border-amber-500/40 shadow-sm'
-                    : moreMenuOpen
+                    : desktopMoreMenuOpen
                     ? 'text-white bg-slate-800/90 border border-slate-700'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60 border border-transparent'
                 }`}
-                title={lang === 'en' ? 'Menu (Experience, Gallery, Partners, Stories, About)' : 'মেনু (আরও বিভাগসমূহ)'}
+                title={lang === 'en' ? 'More pages' : 'আরও পৃষ্ঠা'}
                 aria-label={lang === 'en' ? 'More pages' : 'আরও পৃষ্ঠা'}
-                aria-expanded={moreMenuOpen}
+                aria-expanded={desktopMoreMenuOpen}
                 aria-haspopup="true"
               >
-                {moreMenuOpen ? (
+                {desktopMoreMenuOpen ? (
                   <X className="w-5 h-5 text-amber-400" />
                 ) : (
                   <Menu className="w-5 h-5 text-amber-400" />
@@ -186,25 +257,25 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xs hidden lg:inline font-medium">
                   {lang === 'en' ? 'More' : 'আরও'}
                 </span>
-                {isMoreActive && (
+                {isDesktopMoreActive && (
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                 )}
               </button>
 
-              {/* 3-Dot Dropdown Panel */}
-              {moreMenuOpen && (
+              {/* Desktop Dropdown Panel */}
+              {desktopMoreMenuOpen && (
                 <div
                   className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-[#0B132B]/98 backdrop-blur-xl border border-amber-500/30 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150"
                   role="menu"
                   aria-orientation="vertical"
                 >
-                  <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between text-[10px] uppercase tracking-widest text-amber-400/80 font-mono font-semibold">
+                  <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between text-[10px] uppercase tracking-widest text-amber-400/90 font-mono font-semibold">
                     <span>{lang === 'en' ? 'More Sections' : 'আরও বিভাগসমূহ'}</span>
                     <span className="text-slate-500">4 Pages</span>
                   </div>
 
                   <div className="py-1.5 space-y-1">
-                    {moreNavItems.map((item) => {
+                    {desktopMoreNavItems.map((item) => {
                       const isActive = currentPage === item.id;
                       const IconComponent = item.icon;
                       return (
@@ -247,171 +318,115 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </nav>
 
-          {/* Zone 3: Mobile Hamburger Button (Desktop links are in Zone 2) */}
-          <div className="flex items-center">
-            {/* Mobile Hamburger Button */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer transition-colors"
-              aria-label="Open Navigation Menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </div>
+          {/* Mobile Header Menu: Home, Events, Contact + More Button */}
+          <div className="flex md:hidden items-center gap-1 sm:gap-1.5">
+            {mobileVisibleNavItems.map((item) => {
+              const isActive = currentPage === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'text-amber-300 font-bold bg-amber-500/20 border border-amber-500/40 shadow-sm'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/70 border border-transparent'
+                  }`}
+                >
+                  {lang === 'en' ? item.labelEn : item.labelBn}
+                </button>
+              );
+            })}
 
-      {/* Slide-In Mobile Navigation Drawer with Overlay Backdrop */}
-      {/* 1. Backdrop Overlay */}
-      <div
-        onClick={() => setMobileMenuOpen(false)}
-        className={`fixed inset-0 z-50 bg-black/75 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        aria-hidden="true"
-      />
+            {/* Mobile More Button with Dropdown Card */}
+            <div className="relative" ref={mobileMoreMenuRef}>
+              <button
+                onClick={() => setMobileMoreMenuOpen((prev) => !prev)}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ml-0.5 ${
+                  isMobileMoreActive
+                    ? 'text-amber-300 font-bold bg-amber-500/20 border border-amber-500/40 shadow-sm'
+                    : mobileMoreMenuOpen
+                    ? 'text-white bg-slate-800/90 border border-slate-700'
+                    : 'text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60'
+                }`}
+                aria-label="Open More Options"
+                aria-expanded={mobileMoreMenuOpen}
+              >
+                <span>{lang === 'en' ? 'More' : 'আরও'}</span>
+                {mobileMoreMenuOpen ? (
+                  <X className="w-3.5 h-3.5 text-amber-400" />
+                ) : (
+                  <Menu className="w-3.5 h-3.5 text-amber-400" />
+                )}
+                {isMobileMoreActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+                )}
+              </button>
 
-      {/* 2. Slide-In Sidebar Panel */}
-      <div
-        className={`fixed top-0 right-0 bottom-0 z-50 w-[310px] sm:w-[360px] max-w-[85vw] bg-[#070B19] border-l border-amber-500/30 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-in-out md:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile Navigation"
-      >
-        {/* Drawer Header */}
-        <div className="flex items-center justify-between p-4 border-b border-amber-500/20 bg-slate-950/80">
-          <div onClick={() => handleNavClick('home')} className="cursor-pointer">
-            <Logo size="sm" showSubtitle={false} />
-          </div>
+              {/* Mobile Dropdown Card - Matching User's Screenshot with 6 Buttons */}
+              {mobileMoreMenuOpen && (
+                <>
+                  {/* Invisible Backdrop to close on tap outside */}
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setMobileMoreMenuOpen(false)}
+                    aria-hidden="true"
+                  />
 
-          <div className="flex items-center gap-2">
-            {/* Close Button */}
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-              aria-label="Close navigation menu"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Drawer Nav Items (Scrollable) */}
-        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
-          <div>
-            <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-widest text-slate-500 font-semibold">
-              {lang === 'en' ? 'Main Navigation' : 'মূল মেনু'}
-            </p>
-            <div className="space-y-1">
-              {primaryNavItems.map((item) => {
-                const isActive = currentPage === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer min-h-[44px] ${
-                      isActive
-                        ? 'bg-amber-500/15 text-amber-300 font-bold border border-amber-500/30'
-                        : 'text-slate-300 hover:bg-slate-900 hover:text-white'
-                    }`}
+                  <div
+                    className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-24px)] rounded-2xl bg-[#0B132B]/98 backdrop-blur-xl border border-amber-500/30 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+                    role="menu"
+                    aria-orientation="vertical"
                   >
-                    <span>{lang === 'en' ? item.labelEn : item.labelBn}</span>
-                    <ChevronRight
-                      className={`w-4 h-4 transition-transform ${
-                        isActive ? 'text-amber-400 translate-x-0.5' : 'text-slate-600'
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div>
-            <p className="px-3 pb-2 text-[10px] font-mono uppercase tracking-widest text-amber-400/80 font-semibold flex items-center gap-1.5">
-              <Menu className="w-3.5 h-3.5" />
-              <span>{lang === 'en' ? 'More Sections' : 'আরও বিভাগসমূহ'}</span>
-            </p>
-            <div className="space-y-1">
-              {moreNavItems.map((item) => {
-                const isActive = currentPage === item.id;
-                const IconComponent = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer min-h-[44px] ${
-                      isActive
-                        ? 'bg-amber-500/15 text-amber-300 font-bold border border-amber-500/30'
-                        : 'text-slate-300 hover:bg-slate-900 hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <IconComponent className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span>{lang === 'en' ? item.labelEn : item.labelBn}</span>
+                    {/* Header: MORE SECTIONS      6 PAGES */}
+                    <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between text-[10px] uppercase tracking-widest text-amber-400/90 font-mono font-semibold">
+                      <span>{lang === 'en' ? 'More Sections' : 'আরও বিভাগসমূহ'}</span>
+                      <span className="text-slate-400">6 Pages</span>
                     </div>
-                    <ChevronRight
-                      className={`w-4 h-4 transition-transform ${
-                        isActive ? 'text-amber-400 translate-x-0.5' : 'text-slate-600'
-                      }`}
-                    />
-                  </button>
-                );
-              })}
+
+                    {/* The 6 Buttons: Vendors, Partners, Experience, Gallery, Stories, About */}
+                    <div className="py-1.5 space-y-1">
+                      {mobileMoreNavItems.map((item) => {
+                        const isActive = currentPage === item.id;
+                        const IconComponent = item.icon;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => handleNavClick(item.id)}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                              isActive
+                                ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300 font-semibold shadow-sm'
+                                : 'text-slate-200 hover:bg-slate-800/80 hover:text-white border border-transparent'
+                            }`}
+                            role="menuitem"
+                          >
+                            <div
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                                isActive
+                                  ? 'bg-amber-500 text-slate-950 font-bold'
+                                  : 'bg-slate-900 border border-slate-800 text-amber-400'
+                              }`}
+                            >
+                              <IconComponent className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold truncate leading-tight text-white">
+                                {lang === 'en' ? item.labelEn : item.labelBn}
+                              </p>
+                              <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">
+                                {lang === 'en' ? item.descriptionEn : item.descriptionBn}
+                              </p>
+                            </div>
+                            {isActive && (
+                              <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-          </div>
-
-          {/* Action Buttons inside Drawer */}
-          <div className="pt-4 space-y-2.5 border-t border-slate-800/80 mt-4">
-            <button
-              onClick={() => handleNavClick('vendors')}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold uppercase tracking-wider text-xs shadow-lg shadow-amber-500/20 cursor-pointer min-h-[44px]"
-            >
-              <Sparkles className="w-4 h-4 fill-slate-950" />
-              <span>{lang === 'en' ? 'Become a Vendor' : 'ভেন্ডর হোন'}</span>
-            </button>
-
-            <button
-              onClick={() => handleNavClick('partners')}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-amber-500/40 text-amber-300 hover:bg-amber-500/10 text-xs font-semibold uppercase tracking-wider cursor-pointer min-h-[44px]"
-            >
-              <span>{lang === 'en' ? 'Become a Partner' : 'পার্টনার হোন'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Drawer Footer: Verified Contact & Social links */}
-        <div className="p-4 border-t border-amber-500/20 bg-slate-950/90 space-y-3">
-          <div className="space-y-1.5 text-xs text-slate-400 font-mono">
-            <a
-              href={`tel:${OFFICIAL_INFO.phone}`}
-              className="flex items-center gap-2 hover:text-amber-400 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>{OFFICIAL_INFO.phone}</span>
-            </a>
-            <a
-              href={`mailto:${OFFICIAL_INFO.email}`}
-              className="flex items-center gap-2 hover:text-amber-400 transition-colors break-all"
-            >
-              <Mail className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>{OFFICIAL_INFO.email}</span>
-            </a>
-          </div>
-
-          <div className="flex items-center gap-2 pt-1 border-t border-slate-800">
-            <a
-              href={OFFICIAL_INFO.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-400 text-xs text-slate-300 hover:text-amber-400 transition-colors"
-            >
-              <Instagram className="w-3.5 h-3.5 text-pink-400" />
-              <span>Instagram</span>
-            </a>
           </div>
         </div>
       </div>
